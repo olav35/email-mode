@@ -3,3 +3,4 @@ email-mode is a work-in-progress plaintext email composing mode for emacs.
 
 ** goals
 - Provide automatic linting, and realtime formatting based on the https://useplaintext.email guidelines.
+- Integrate with https://github.com/zachcurry/emacs-anywhere, such that it can be used to comfortably to compose emails for web email clients such as protonmail.
