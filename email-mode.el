@@ -26,6 +26,31 @@
 
 ;;; Code:
 
-(define-derived-mode email-mode text-mode "Email")
+(defun email-mode-quote ()
+  "Add one level of quotation to the current line"
+  (interactive)
+  (save-excursion
+    (move-beginning-of-line nil)
+    (insert "> ")))
+
+(defun email-mode-un-quote ()
+  "Remove one level of quoatation from the current line"
+  (interactive)
+  (save-excursion
+    (move-beginning-of-line nil)
+    (when (string-equal (string (following-char)) ">")
+      (forward-char)
+      (when (string-equal (string (following-char)) " ")
+	(move-beginning-of-line nil)
+	(delete-char 2)))))
+
+(defvar email-mode-map nil)
+(setq email-mode-map (make-sparse-keymap))
+
+(define-key email-mode-map (kbd "C-c C-q") 'email-mode-quote)
+(define-key email-mode-map (kbd "C-c C-u") 'email-mode-un-quote)
+
+(define-derived-mode email-mode text-mode "Email"
+  (setq-local comment-dwim 'email-mode-quote))
 
 ;;; email-mode.el ends here
