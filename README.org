@@ -1,0 +1,5 @@
+* email-mode
+email-mode is a work-in-progress plaintext email composing mode for emacs.
+
+** goals
+- Provide automatic linting, and realtime formatting based on the https://useplaintext.email guidelines.
