@@ -25,6 +25,13 @@
 ;; An email composition mode
 
 ;;; Code:
+(defun email-mode-line-quoted-p ()
+  "Return t if line is quoted, and nil otherwise"
+  (save-excursion
+    (move-beginning-of-line nil)
+    (when (string-equal (string (following-char)) ">")
+      (forward-char)
+      (string-equal (string (following-char)) " "))))
 
 (defun email-mode-quote ()
   "Add one level of quotation to the current line"
@@ -33,22 +40,18 @@
     (move-beginning-of-line nil)
     (insert "> ")))
 
-(defun email-mode-un-quote ()
+(defun email-mode-unquote ()
   "Remove one level of quoatation from the current line"
   (interactive)
   (save-excursion
-    (move-beginning-of-line nil)
-    (when (string-equal (string (following-char)) ">")
-      (forward-char)
-      (when (string-equal (string (following-char)) " ")
-	(move-beginning-of-line nil)
-	(delete-char 2)))))
+    (when email-mode-line-quoted-p
+	(delete-char 2))))
 
 (defvar email-mode-map nil)
 (setq email-mode-map (make-sparse-keymap))
 
 (define-key email-mode-map (kbd "C-c C-q") 'email-mode-quote)
-(define-key email-mode-map (kbd "C-c C-u") 'email-mode-un-quote)
+(define-key email-mode-map (kbd "C-c C-u") 'email-mode-unquote)
 
 (define-derived-mode email-mode text-mode "Email"
   (setq-local comment-dwim 'email-mode-quote))
